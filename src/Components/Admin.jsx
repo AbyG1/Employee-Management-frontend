@@ -11,23 +11,35 @@ function Admin() {
 
   //api fetching to get all employee details
 
-  const base_url = 'http://localhost:8000/get-all-employees'
+  const base_url = 'http://localhost:8000'
 
   //state creation
   const [allEmployees,setAllEmployees] = useState([])
 
   const fetchData = async() => {
-      const result = await axios.get(base_url)
+      const result = await axios.get(`${base_url}/get-all-employees`)
       console.log(result.data.employees)
       setAllEmployees(result.data.employees)
   }
   console.log(allEmployees)
 
 
+  const deleteEmp = async(id) => {
+    const result = await axios.delete(`${base_url}/delete-an-employee/${id}`)
+    console.log(result)
+    fetchData()
+    alert(result.data.message)
+  }
+
+
+
 
   useEffect(() => {
     fetchData()
   },[])
+
+
+
 
 
   return (
@@ -93,7 +105,7 @@ function Admin() {
             <td>
               <div className='d-flex '>
                 <i className='fa-solid fa-pen p-2'></i>
-                <i className='fa-solid fa-trash p-2'></i>
+                <i onClick={() => deleteEmp(item.id)} className='fa-solid fa-trash p-2'></i>
               </div>
             </td>
           </tr>
