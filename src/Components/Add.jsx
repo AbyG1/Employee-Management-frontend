@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { MDBInput } from 'mdb-react-ui-kit';
 import axios from 'axios'
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 
 function Add() {
@@ -11,6 +12,7 @@ function Add() {
   const [designation, setDesignation] = useState("")
   const [salary, setSalary] = useState("")
   
+  const location = useNavigate()
   
 
   const base_url='http://localhost:8000/add-an-employee'
@@ -24,8 +26,13 @@ function Add() {
     //api call to add employee details to the mongodb
     const body = {id,name,age,designation,salary}
     console.log('Before Axios request');
-    const result = await axios.post(base_url,body)
-    console.log('After Axios request', result.data);
+    const result = await axios.post(base_url,body).then((result) => {
+      alert(result.data.message)
+      location("/")
+    }).catch((error) => {
+      alert("Employee already exist with this id")
+    })
+    
   } 
 
 
