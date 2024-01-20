@@ -108,8 +108,11 @@ function Admin() {
                   <i className="fa-solid fa-eye"></i>
 
               </Link>
+              
+              <Link to={`edit/${item.id}`}>
+                <i className='fa-solid fa-pen '></i>
+              </Link>
                 
-                <i className='fa-solid fa-pen p-2'></i>
                 <i onClick={() => deleteEmp(item.id)} className='fa-solid fa-trash p-2'></i>
               </div>
             </td>
