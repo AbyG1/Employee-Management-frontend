@@ -1,79 +1,76 @@
-import React, { useEffect, useState } from 'react'
-import { MDBInput } from 'mdb-react-ui-kit';
+import React, { useEffect, useState } from 'react';
+import user from '../assets/user.png'
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
 
-function Edit() {
-  //To hold updated values
-  const [eid,setId]=useState("")
-  const [empname,setName]=useState("")
-  const [empage,setAge]=useState("")
-  const [empdesignation,setDesignation]=useState("")
-  const [empsalary,setSalary]=useState("")
+import { MDBListGroup, MDBListGroupItem } from 'mdb-react-ui-kit';
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCardImage,
+  MDBBtn,
+  MDBRipple
+} from 'mdb-react-ui-kit';
+import { useParams } from 'react-router-dom';
 
-    //get a particular id from the url
-    const {id}=useParams()
-    console.log(id);//4
+function View() {
 
+  const base_url = 'http://localhost:8000'
+  const [employeeData,setEmployeeData] = useState({})
+
+
+
+  const {id} = useParams()
+  console.log(id)
   //get a particular employee details
-  const getEmployee=async(id)=>{
-    const result = await axios.get(`${base_url}/get-an-employee/${id}`)//employee details
-    console.log(result.data.employees);//object
-    // setEmployeeData(result.data.employees)
-    setId(result.data.employees.id)
-    setName(result.data.employees.name)
-    setAge(result.data.employees.age)
-    setDesignation(result.data.employees.designation)
-    setSalary(result.data.employees.salary)
-
+  const getEmployee = async(id) => {
+    const result = await axios.get(`${base_url}/get-an-employee/${id}`)
+    console.log(result.data.employees)
+    setEmployeeData(result.data.employees)
   }
+  
   useEffect(()=>{
-    getEmployee(id)
-  },[])
-
-  const location= useNavigate()
-
-//update function
-    const base_url='http://localhost:8000'
-    //api call to update an employee details
-    const updateEmployee=async(e)=>{
-      e.preventDefault()
-      const body={
-        id:eid,
-        name:empname,
-        age:empage,
-        designation:empdesignation,
-        salary:empsalary
-      }
-        const result= await axios.post(`${base_url}/update-an-employee/${id}`,body)
-        console.log(result);
-        alert(result.data.message)
-        location('/')//back to admin
-    }
-
+    getEmployee(id) 
+  },[id])
 
   return (
-    <div>
-      <div className="container text-center m-5">
-        <h2>Edit Employee</h2>
-        <form className='p-5'>
-        <MDBInput onChange={(e)=>setId(e.target.value)} value={eid} label='ID' id='formControlLg' type='text' size='lg' readOnly />
-        <br />
-        <MDBInput onChange={(e)=>setName(e.target.value)} value={empname} label='Name' id='formControlLg' type='text' size='lg' />
-      <br />
-      <MDBInput onChange={(e)=>setAge(e.target.value)}  value={empage}  label='Age' id='formControlLg' type='text' size='lg' />
-      <br />
-      <MDBInput onChange={(e)=>setDesignation(e.target.value)} value={empdesignation}  label='Designation' id='formControlLg' type='text' size='lg' />
-      <br />
-      <MDBInput onChange={(e)=>setSalary(e.target.value)} value={empsalary} label='Salary' id='formControlLg' type='text' size='lg' />
-      <br />
-      <div>
-        <button onClick={(e)=>updateEmployee(e)} className='btn btn-success m-3'>Update <i className='fa-solid fa-user'></i></button>
+   
+
+
+    <div className='container-fluid'>
+      <div className="row d-flex justify-content-center p-5">
+        <div className="col-md-5 ">
+            <MDBCard>
+                    <MDBRipple rippleColor='light' rippleTag='div' className='bg-image hover-overlay'>
+                      <MDBCardImage src={user} className='w-75 d-block mx-auto' fluid alt='...' />
+                      <a>
+                        <div className='mask' style={{ backgroundColor: 'rgba(251, 251, 251, 0.15)' }}></div>
+                      </a>
+                    </MDBRipple>
+                    <MDBCardBody>
+                      <MDBCardTitle>Employee Details</MDBCardTitle>
+                      {
+                          <MDBCardText>
+
+                              <MDBListGroup  light small>
+                                  <MDBListGroupItem>Employee ID: {employeeData.id}</MDBListGroupItem>
+                                  <MDBListGroupItem>Name: {employeeData.name}</MDBListGroupItem>
+                                  <MDBListGroupItem>Age: {employeeData.age}</MDBListGroupItem>
+                                  <MDBListGroupItem>Designation: {employeeData.designation}</MDBListGroupItem>
+                                  <MDBListGroupItem>Salary: {employeeData.salary}</MDBListGroupItem>
+                            </MDBListGroup>
+                        
+                      </MDBCardText>
+
+                      }
+                     
+                    </MDBCardBody>
+            </MDBCard>
+        </div>
       </div>
-        </form>
-      </div> 
     </div>
   )
 }
 
-export default Edit
+export default View
