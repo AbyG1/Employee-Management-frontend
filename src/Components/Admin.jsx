@@ -102,8 +102,13 @@ function Admin() {
             <td>
              {item.salary}
             </td>
-            <td>
-              <div className='d-flex '>
+            <td className='border'>
+              <div className=' d-flex justify-content-evenly'>
+              <Link to={`view/${item.id}`}>
+                  <i className="fa-solid fa-eye"></i>
+
+              </Link>
+                
                 <i className='fa-solid fa-pen p-2'></i>
                 <i onClick={() => deleteEmp(item.id)} className='fa-solid fa-trash p-2'></i>
               </div>
